@@ -1,3 +1,4 @@
+const { error } = require('console');
 const fs = require('fs');
 
 
@@ -6,43 +7,32 @@ const pathOperation = process.argv.slice(2)?.[0] ;
 // adds a task to the tasks.json file
 const addTask = (task) => {
     if(!task){
-        console.log("Enter task properly");
-            return ;
+        return console.log("Please enter a task to add");
     }
-    
     if(!fs.existsSync('tasks.json')){
-        const taskId = 0 ;
-    console.log(taskId);
-    const taskObj = {
-        id : `${taskId + 1}\n` ,
-        task : `${task}\n` ,
-        status : 'todo'
-    }
-        fs.writeFileSync('tasks.json', JSON.stringify([taskObj]), (err, data) => {
-            if(err){
-                throw new err ;
+        const tasks = [
+            {
+                id: 1 ,
+                task: task ,
+                status: 'todo'
             }
-        });
-        console.log("Task added successfully");
-        return ;
+        ] ; 
+        fs.writeFileSync('tasks.json' , JSON.stringify(tasks , null , 2)) ; 
+        return console.log("Task added successfully");
     }
-    const tasks = fs.readFileSync('tasks.json', (err, data) => {
-        if(err){
-            throw new err ;
-        }
-    });
-    const taskId = JSON.parse(tasks).length;
-    const taskObj = {
-        id : `${taskId + 1}\n` ,
-        task : `${task}\n` ,
-        status : 'todo'
-    }
-    fs.appendFileSync('tasks.json' , JSON.stringify(taskObj), (err , data) => {
-        if(err){
-            throw new err ;
-        }
-    });
+    const fetchedTasks = JSON.parse(fs.readFileSync('tasks.json' , 'utf-8' , (error) => {
+        console.log("Error reading tasks.json file: " + error);
+    })) ;
+    const todoId = Object.keys(fetchedTasks).length ; 
+    const newTask = {
+        id: todoId + 1 ,
+        task: task ,
+        status: 'todo'
+    } ;
+    fetchedTasks.push(newTask) ;
+    fs.writeFileSync('tasks.json' , JSON.stringify(fetchedTasks , null , 2)) ;
     console.log("Task added successfully");
+    
 }
 // updates task status to done or todo
 const updateTask = (taskId , newTask) => {
