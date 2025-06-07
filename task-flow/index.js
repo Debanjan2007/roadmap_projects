@@ -153,7 +153,9 @@ const markDone = (todoId) => {
     if(!todoId){
         return console.log("⚠️️️️️️ Provide is please ⚠️️️️️️") ;
     }
-    
+     if(!fs.existsSync('tasks.json')){
+            return console.log("⚠️ There is no file for todos! ⚠️");        
+        }
     const tasks = JSON.parse(fs.readFileSync('tasks.json' , 'utf-8' , (err) => {
         if(err) {throw new err}
     })) ;
@@ -168,6 +170,31 @@ const markDone = (todoId) => {
     }));
     fs.writeFileSync('tasks.json' , JSON.stringify(tasks , null , 2))
     console.log("✔️ Todo marked as Done ✔️");
+}
+
+// mark in progress functiobnality 
+const markInProg = (todoId) => {
+    if(!todoId){
+        return console.log("⚠️️️️️️ Provide is please ⚠️️️️️️") ;
+    }
+     if(!fs.existsSync('tasks.json')){
+            return console.log("⚠️ There is no file for todos! ⚠️");        
+        }
+    const tasks = JSON.parse(fs.readFileSync('tasks.json' , 'utf-8' , (err) => {
+        if(err) {throw new err}
+    })) ;
+    if(!tasks){
+        console.log("Can't find any logs may be an server issue");
+    }
+    tasks.forEach((elm => {
+        if(elm.id == todoId){
+            elm.status = 'in-progress' ;
+            return ;
+        }
+    }));
+    fs.writeFileSync('tasks.json' , JSON.stringify(tasks , null , 2))
+    console.log("✔️ Todo marked as Done ✔️");
+
 }
 // path operations dynamic routes for the functionality 
 const pathOperation = process.argv.slice(2)?.[0] ;
@@ -224,6 +251,10 @@ switch (pathOperation){
     case 'mark-done':
         const marktaskId = process.argv.slice(2)[1] ;
         markDone(marktaskId) ;
+        break ;
+    case 'mark-in-progress': 
+        const id = process.argv.slice(2)[1] ;
+        markInProg(id) ;
         break ;
     default : 
         console.log("Invalid operation. Use 'add', 'list', 'update', or 'del'.");
