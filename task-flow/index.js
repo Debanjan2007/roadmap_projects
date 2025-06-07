@@ -2,7 +2,7 @@ const { error } = require('console');
 const fs = require('fs');
 
 
-const pathOperation = process.argv.slice(2)?.[0] ;
+
 
 // adds a task to the tasks.json file
 const addTask = (task) => {
@@ -37,6 +37,7 @@ const addTask = (task) => {
     } ;
     fetchedTasks.push(newTask) ;
     fs.writeFileSync('tasks.json' , JSON.stringify(fetchedTasks , null , 2)) ;
+    console.log(JSON.stringify(newTask , null , 2));
     console.log(`✅ Task added successfully ✅ \n taskId : ${newTask.id} `);
 }
 // updates task status to done or todo
@@ -48,27 +49,46 @@ const updateTask = async (taskId , newTask) => {
         console.log(err);
         return ;
     })) ;
+    if(!tasks){
+        console.log("There is nothing to update add tasks first");
+    }
     const tasktoupdate = tasks[taskId - 1] ; // getting the requested task
     if(!tasktoupdate){
         return console.log("⚠ No task found with that index ⚠");
     }
     const updatedtask = {
-        id: index.id ,
+        id: tasktoupdate.id ,
         task: newTask ,
         status: 'todo'
     }
-    tasks.splice(index.id - 1 , 1 , updatedtask) ;
+    tasks.splice(taskId - 1 , 1 , updatedtask) ;
     fs.writeFile('tasks.json' , JSON.stringify(tasks , null , 2) , (err) => {
         if(err)
             console.log(err);
     }) ;
-    console.log("update complete");
+    console.log("✅ update complete ✅");
 }
 
 // deletes task by id
 const deltask = (taskId) => {
-    console.log("deleting task with id: " + taskId);
+    if(!taskId || taskId < 0){
+        return console.log("Enter right id to delete task");
+    }
+    const tasks = JSON.parse(fs.readFileSync('tasks.json' , 'utf-8' , (err) => {
+        if(err)
+            console.log(err);
+    })) ;
+    if(!tasks){
+        console.log("There is nothing to delete add tasks first");
+    }
+    tasks.splice(taskId - 1 , 1) ;
+
+    fs.writeFileSync('tasks.json' , JSON.stringify(tasks , null , 2))
+    console.log("todo deleted with the id : " , taskId);
 }
+
+// path operations dynamic routes for the functionality 
+const pathOperation = process.argv.slice(2)?.[0] ;
 
 switch (pathOperation){
     case 'add' : 
