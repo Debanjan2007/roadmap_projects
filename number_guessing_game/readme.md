@@ -28,6 +28,8 @@ A simple CLI-based number guessing game built with Node.js.
 1. Install dependencies:
 2. Start the game:
 
+the cli 
+[cli](https://roadmap.sh/projects/number-guessing-game)
 
 ## Author
 
