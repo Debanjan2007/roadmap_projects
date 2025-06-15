@@ -27,13 +27,13 @@
     <div class="Container d-flex bg-light justify-content-center align-items-center">
         <div class="formContainer p-3 border-dark  d-flex flex-column align-items-center justify-content-center">
             <h3 class="d-block mb-5">Personal Blog App</h3>
-            <form action="/api/v1/blog/login" method="post">
+            <form action="http://localhost:6800/api/v1/blog/login" method="post">
                 <div class="form-floating mb-2 d-block w-100">
-                    <input type="userName" class="form-control mb-2" id="floatingInput" placeholder="john_03">
+                    <input type="userName" class="form-control mb-2" id="floatingInput" name="userName" placeholder="john_03">
                     <label for="floatingInput">userName</label>
                 </div>
                 <div class="form-floating mb-2 d-block w-100">
-                    <input type="password" class="form-control mb-2" id="floatingInput" placeholder="67434383">
+                    <input type="password" class="form-control mb-2" id="floatingInput" name="password" placeholder="67434383">
                     <label for="floatingInput">Password</label>
                 </div>
                 <button type="submit" class="btn btn-primary">Log in</button>
