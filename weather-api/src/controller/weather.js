@@ -21,19 +21,22 @@ const getWeatherDetail = asyncHandler( async (req , res) => {
     .then(async (event) => {
         const data = await event.json() ;        
         
-        // const clientSet = await client.set(LOCATION , data) ;
-        // const clientExpirySet = await client.expire(LOCATION , process.env.REDIS_EXPIY)
+
+        await client.set(LOCATION , data) ;
+        await client.expire(LOCATION , process.env.REDIS_EXPIY)
         
-        // console.log(clientSet , clientExpirySet);
-        
-        // if(!clientExpirySet && !clientSet){
-        //     return res
-        //     .status(501)
-        //     .json(
-        //         apiError(501 , {success : false} , "something went wrong!")
-        //     )
-        // }
         console.log(data);
+
+
+        console.log(clientSet , clientExpirySet);
+        
+        if(!clientExpirySet && !clientSet){
+            return res
+            .status(501)
+            .json(
+                apiError(501 , {success : false} , "something went wrong! in DB")
+            )
+        }
         
 
         return res
