@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia">
+    <link rel="stylesheet" href="/loginstyle.css">
+</head>
+<body>
+    <div class="Container d-flex bg-light justify-content-center align-items-center">
+        <div class="formContainer p-3 border-dark  d-flex flex-column align-items-center justify-content-center">
+            <h3 class="d-block mb-5">Personal Blog App</h3>
+            <form action="http://localhost:6800/api/v1/blog/login" method="post">
+                <div class="form-floating mb-2 d-block w-100">
+                    <input type="userName" class="form-control mb-2" id="floatingInput" name="userName" placeholder="john_03">
+                    <label for="floatingInput">userName</label>
+                </div>
+                <div class="form-floating mb-2 d-block w-100">
+                    <input type="password" class="form-control mb-2" id="floatingInput" name="password" placeholder="67434383">
+                    <label for="floatingInput">Password</label>
+                </div>
+                <button type="submit" class="btn btn-primary">Log in</button>
+            </form>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
+</html>
