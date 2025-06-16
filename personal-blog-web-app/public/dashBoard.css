@@ -1,0 +1,10 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Sofia", sans-serif;
+}
+.acc{
+    font-weight: 800;
+    transform: scale(1.2);
+}
