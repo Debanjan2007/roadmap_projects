@@ -11,27 +11,30 @@
 <body>
     <div class="container mt-0">
 
-  <div class="row bg-dark text-white align-items-center py-3 rounded">
+  <div class="row navbar-custom bg-dark text-white align-items-center py-3 rounded">
     <div class="col-md-4  text-start">
-      <strong>MyLogo</strong>
+      <strong>
+        <img src="/blogLogo.png" class="logo-img" alt="">
+      </strong>
     </div>
     <div class="col-md-4 text-center">
-      <nav>
+      <nav class="d-flex justify-content-center gap-3">
         <a href="#" class="text-white me-3 text-decoration-none">Home</a>
         <a href="#" class="text-white me-3 text-decoration-none">Post</a>
-        <a href="#" class="text-white text-decoration-none">Contact</a>
+        <a href="http://localhost:6800/api/v1/blog/contact" class="text-white text-decoration-none">Contact</a>
       </nav>
     </div>
     <div class="acc col-md-3 text-end">
-      <span>User</span>
+      <span><%= userName %></span>
+      <span>Add</span>
     </div>
   </div>
 
   <!-- Row 2: Main Content -->
   <div class="row mt-3">
-    <div class="col-12 bg-light text-dark p-4 rounded">
-      <h3>Main Content Area</h3>
-      <p>This is your second row with full-width content but inside a nicely guttered container.</p>
+    <div class="col-12 bg-light content-card text-dark p-4 rounded"></div>
+      <h3><%= userName %></h3>
+      <p></p>
     </div>
   </div>
 

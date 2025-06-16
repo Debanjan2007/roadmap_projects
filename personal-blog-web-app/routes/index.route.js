@@ -15,4 +15,10 @@ router.route('/login').post(
     loginUser
 )
 
+router.route('/contact').get(
+    (req , res) => {
+        return res.render('contact' , {title : 'contact'})
+    }
+)
+
 module.exports = router ;
