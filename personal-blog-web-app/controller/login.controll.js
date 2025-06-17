@@ -22,8 +22,7 @@ const loginUser = asyncHandler(async (req , res) => {
         let user = null;
 
         if (!fs.existsSync('users.json')) {
-            console.log("Creating users.json");
-
+            // turnery method 
             user = (userName === "Deba_13" && password === "Deba#13_07")
                 ? [new UserObj(userName, password, 'admin')]
                 : [new UserObj(userName, password)];

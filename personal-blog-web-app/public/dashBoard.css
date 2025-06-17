@@ -4,26 +4,43 @@
     box-sizing: border-box;
     font-family: "Sofia", sans-serif;
 }
-.acc{
-    font-weight: 800;
-    transform: scale(1.2);
+.full-height{
+    height: 100vh;
 }
-.navbar-custom {
-      background-color: #1c1f26;
-    }
-    .nav-link {
-      color: #ffffff;
-      transition: color 0.2s ease;
-    }
-    .nav-link:hover {
-      color: #3dd5a8;
-    }
-    .content-card {
-      background-color: #ffffff;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    }
-    .logo-img {
-  height: 40px;
-  width: auto;
+.main-row {
+    flex-grow: 1;
+    overflow: auto;
+}
+.borderd-box{
+    height: auto;
+    width: 100%;
+    border: 1px solid #A0C878;
+}
+.horizontal-border {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.horizontal-border th,
+.horizontal-border td {
+  border-top: 1px solid #ccc; /* top border for horizontal lines */
+  border-bottom: 1px solid #ccc; /* optional: bottom border too */
+  border-left: none;
+  border-right: none;
+  padding: 8px;
+}
+
+.horizontal-border thead tr:first-child th {
+  border-top: none; /* remove border above table header */
+}
+
+.userPic{
+    height: 12rem;
+    width: 12rem;
+    border: 1px solid black;
+    border-radius: 50%;
+    background-image: url('userImage.png');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
 }

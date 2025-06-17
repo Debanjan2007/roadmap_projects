@@ -1,46 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia">
-    <link rel="stylesheet" href="/dashBoard.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <!-- bootstrap cdn -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <!-- font awesome cdn -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- google fonts cdn -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia">
+  <link rel="stylesheet" href="/dashBoard.css">
 </head>
+
 <body>
-    <div class="container mt-0">
+  <div class="container-fluid full-height">
+    <div class="row">
+      <div class="col-md-2 p-4" style="background-color: #FAF6E9;">
+        <div class="container-fluid full-height d-flex flex-column gap-4">
+          <div class="row">
+            Mini Blog
+          </div>
+          <div class="row main-row">
+            <div class="container">
+              <button class="btn d-block rounded border-1 border-primary">
+                <a href="" class="text-decoration-none ">DashBoard</a>
+              </button>
+              <button class="btn d-block rounded">
+                <a href="" class="text-decoration-none">Home</a>
+              </button>
+              <button class="btn d-block rounded">
+                <a href="" class="text-decoration-none">MyPosts</a>
+              </button>
+              <button class="btn d-block rounded">
+                <a href="" class="text-decoration-none">Contact</a>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-8 p-4" style="background-color: #FFFDF6;">
+        <div class="container-fluid d-flex flex-column gap-4">
+          <div class="input-group">
+            <input type="search" class="form-control" placeholder="Search...">
+            <button class="btn btn-outline-secondary" type="button">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+          </div>
+          <div class="container d-flex borderd-box p-2 rounded">
+            <h1 class="d-block flex-grow-1">MyPosts</h1>
+            <h2 class="d-block">45</h2>
+          </div>
+          <div class="container p-2">
+            <h1>Recent Posts</h1>
+            <div class="container borderd-box p-4 rounded">
+              <table class="w-100 horizontal-border">
+                <thead>
+                  <tr>
+                    <th>Title</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th> </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Alice</td>
+                    <td>24</td>
+                    <td>USA</td>
+                    <td><i class="fa-solid fa-ellipsis-vertical"></i></td>
+                  </tr>
+                  <tr>
+                    <td>Bob</td>
+                    <td>30</td>
+                    <td>India</td>
+                    <td><i class="fa-solid fa-ellipsis-vertical"></i></td>
+                  </tr>
+                   <tr>
+                    <td>Bob</td>
+                    <td>30</td>
+                    <td>India</td>
+                    <td><i class="fa-solid fa-ellipsis-vertical"></i></td>
+                  </tr>
+                </tbody>
+              </table>
 
-  <div class="row navbar-custom bg-dark text-white align-items-center py-3 rounded">
-    <div class="col-md-4  text-start">
-      <strong>
-        <img src="/blogLogo.png" class="logo-img" alt="">
-      </strong>
-    </div>
-    <div class="col-md-4 text-center">
-      <nav class="d-flex justify-content-center gap-3">
-        <a href="#" class="text-white me-3 text-decoration-none">Home</a>
-        <a href="#" class="text-white me-3 text-decoration-none">Post</a>
-        <a href="http://localhost:6800/api/v1/blog/contact" class="text-white text-decoration-none">Contact</a>
-      </nav>
-    </div>
-    <div class="acc col-md-3 text-end">
-      <span><%= userName %></span>
-      <span>Add</span>
+            </div>
+          </div>
+          <div class="container w-100">
+            <button class="btn bg-primary" style="color: #FFFDF6;">Create post</button>
+          </div>
+      </div>
+      </div>
+      <div class="col-md-2 p-4 " style="background-color: #FFFDFC;">
+        <div class="container-fluid d-flex flex-column gap-4">
+          <div class="userPic">
+        </div>
+        <div class="container d-flex flex-column gap-3">
+          <h2 class="d-block"><%= userName %></h2>
+          <button class="btn borderd-box rounded">Edit Profile</button>
+        </div>
+          
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Row 2: Main Content -->
-  <div class="row mt-3">
-    <div class="col-12 bg-light content-card text-dark p-4 rounded"></div>
-      <h3><%= userName %></h3>
-      <p></p>
-    </div>
-  </div>
 
-</div>
-
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
 </body>
+
 </html>
