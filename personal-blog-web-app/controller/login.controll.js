@@ -1,16 +1,21 @@
-const { title } = require('process')
 const ApiError = require('../utils/apierror.js')
 const ApiResponse = require('../utils/apiresponse.js')
 const asyncHandler = require('../utils/asynchandler.js')
 const UserObj = require('../utils/userclass.js')
 const fs = require('fs')
+const session = require('express-session');
+// creates post 
+// make files for each user posts with their username for simplicity 
+const addPost = asyncHandler(async (req, res) => {
+    console.log("req.session : ", req.session);
+    const userName = req.session.userName;
+    console.log(userName);
+    const { blogTitle, blogData } = req.body;
+    console.log(blogTitle, blogData);
 
+});
 
-const addPost = () => {
-
-}
-
-const loginUser = asyncHandler(async (req , res) => {
+const loginUser = asyncHandler(async (req, res) => {
     const { userName, password } = req.body;
 
     if ([userName, password].some(field => field.trim() === "")) {
@@ -32,36 +37,52 @@ const loginUser = asyncHandler(async (req , res) => {
                 : [new UserObj(userName, password)];
 
             fs.writeFileSync('users.json', JSON.stringify(user, null, 2), { encoding: 'utf8' });
-
-            return res.render('blogDashboard', {
-                title: 'dashBoard',
-                userName: userName , 
-                blog: [
-                    {
-                        title: 'nil' ,
-                        Date: 'nil' 
-                    } , 
-                    {
-                        title: 'nil' ,
-                        Date: 'nil' 
-                    },
-                    {
-                        title: 'nil' ,
-                        Date: 'nil' 
-                    },
-                ] ,
-                status: 'nil' ,
-                posts: null ,
+            req.session.userName = user.userName;
+            await req.session.save((err) => {
+                if (err) {
+                    // Only send one response!
+                    return res.status(500).send('Session save error');
+                }
+                return res.render('blogDashboard', {
+                    title: 'dashBoard',
+                    userName: user.userName, // use the value you just set
+                    blog: [
+                        { title: 'nil', Date: 'nil' },
+                        { title: 'nil', Date: 'nil' },
+                        { title: 'nil', Date: 'nil' },
+                    ],
+                    status: 'nil',
+                    posts: null,
+                });
             });
+            console.log(req.session.userName);
+
         }
 
         const users = JSON.parse(fs.readFileSync('users.json', 'utf-8'));
 
         for (let existingUser of users) {
             if (existingUser.userName === userName && existingUser.password === password) {
+                req.session.userName = user.userName;
                 return res.render('blogDashboard', {
                     title: 'dashBoard',
-                    userName: userName
+                    userName: userName,
+                    blog: [
+                        {
+                            title: 'nil',
+                            Date: 'nil'
+                        },
+                        {
+                            title: 'nil',
+                            Date: 'nil'
+                        },
+                        {
+                            title: 'nil',
+                            Date: 'nil'
+                        },
+                    ],
+                    status: 'nil',
+                    posts: null,
                 });
             }
         }
@@ -73,10 +94,26 @@ const loginUser = asyncHandler(async (req , res) => {
 
         users.push(user);
         fs.writeFileSync('users.json', JSON.stringify(users, null, 2));
-
+        req.session.userName = user.userName;
         return res.render('blogDashboard', {
             title: 'dashBoard',
-            userName: userName
+            userName: userName,
+            blog: [
+                {
+                    title: 'nil',
+                    Date: 'nil'
+                },
+                {
+                    title: 'nil',
+                    Date: 'nil'
+                },
+                {
+                    title: 'nil',
+                    Date: 'nil'
+                },
+            ],
+            status: 'nil',
+            posts: null,
         });
 
     } catch (error) {
@@ -91,6 +128,6 @@ const loginUser = asyncHandler(async (req , res) => {
 
 
 module.exports = {
-    loginUser ,
+    loginUser,
     addPost
 }

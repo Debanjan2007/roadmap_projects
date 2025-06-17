@@ -1,5 +1,8 @@
 const express = require('express')
 const path = require('path')
+const session = require('express-session');
+const dotenv = require('dotenv').config() ;
+
 
 const app = express() ;
 
@@ -9,7 +12,11 @@ const router = require('./routes/index.route.js')
 // app parsing 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
-
+app.use(session({
+    secret: process.env.SESSION_SECRERT, // use env var in real apps
+    resave: false,
+    saveUninitialized: true,
+}))
 // conecting static files and markup files 
 app.use(express.static(path.join(__dirname , 'public')))
 // ejs setup

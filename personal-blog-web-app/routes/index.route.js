@@ -26,4 +26,7 @@ router.route('/post').get(
         return res.render('blogpost')
     }
 )
+router.route('/post/publish').post(
+    addPost
+)
 module.exports = router ;
