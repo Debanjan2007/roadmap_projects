@@ -5,9 +5,13 @@ const asyncHandler = require('../utils/asynchandler.js')
 const UserObj = require('../utils/userclass.js')
 const fs = require('fs')
 
+
+const addPost = () => {
+
+}
+
 const loginUser = asyncHandler(async (req , res) => {
     const { userName, password } = req.body;
-    console.log(userName, password);
 
     if ([userName, password].some(field => field.trim() === "")) {
         return res.render('errorpage', {
@@ -31,7 +35,23 @@ const loginUser = asyncHandler(async (req , res) => {
 
             return res.render('blogDashboard', {
                 title: 'dashBoard',
-                userName: userName
+                userName: userName , 
+                blog: [
+                    {
+                        title: 'nil' ,
+                        Date: 'nil' 
+                    } , 
+                    {
+                        title: 'nil' ,
+                        Date: 'nil' 
+                    },
+                    {
+                        title: 'nil' ,
+                        Date: 'nil' 
+                    },
+                ] ,
+                status: 'nil' ,
+                posts: null ,
             });
         }
 
@@ -71,5 +91,6 @@ const loginUser = asyncHandler(async (req , res) => {
 
 
 module.exports = {
-    loginUser 
+    loginUser ,
+    addPost
 }

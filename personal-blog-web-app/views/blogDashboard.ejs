@@ -22,22 +22,22 @@
     <div class="row">
       <div class="col-md-2 p-4" style="background-color: #FAF6E9;">
         <div class="container-fluid full-height d-flex flex-column gap-4">
-          <div class="row">
+          <div class="row" style="cursor: pointer;">
             Mini Blog
           </div>
           <div class="row main-row">
             <div class="container">
               <button class="btn d-block rounded border-1 border-primary">
-                <a href="" class="text-decoration-none ">DashBoard</a>
+                <a href="#" class="text-decoration-none" aria-disabled="true">DashBoard</a>
               </button>
-              <button class="btn d-block rounded">
+              <button class="btn navBtn d-block rounded">
                 <a href="" class="text-decoration-none">Home</a>
               </button>
-              <button class="btn d-block rounded">
+              <button class="btn navBtn d-block rounded">
                 <a href="" class="text-decoration-none">MyPosts</a>
               </button>
-              <button class="btn d-block rounded">
-                <a href="" class="text-decoration-none">Contact</a>
+              <button class="btn navBtn d-block rounded">
+                <a href="http://localhost:6800/api/v1/blog/contact" class="text-decoration-none">Contact</a>
               </button>
             </div>
           </div>
@@ -53,7 +53,7 @@
           </div>
           <div class="container d-flex borderd-box p-2 rounded">
             <h1 class="d-block flex-grow-1">MyPosts</h1>
-            <h2 class="d-block">45</h2>
+            <h2 class="d-block"><%= posts ? posts : '0' %></h2>
           </div>
           <div class="container p-2">
             <h1>Recent Posts</h1>
@@ -69,21 +69,21 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td>Alice</td>
-                    <td>24</td>
-                    <td>USA</td>
+                    <td><%= blog[0].title %></td>
+                    <td><%= blog[0].Date %></td>
+                    <td><%= status ? status : 'Published' %></td>
                     <td><i class="fa-solid fa-ellipsis-vertical"></i></td>
                   </tr>
                   <tr>
-                    <td>Bob</td>
-                    <td>30</td>
-                    <td>India</td>
+                    <td><%= blog[1].title %></td>
+                    <td><%= blog[1].Date %></td>
+                     <td><%= status ? status : 'Published' %></td>
                     <td><i class="fa-solid fa-ellipsis-vertical"></i></td>
                   </tr>
                    <tr>
-                    <td>Bob</td>
-                    <td>30</td>
-                    <td>India</td>
+                    <td><%= blog[2].title %></td>
+                    <td><%= blog[2].Date %></td>
+                     <td><%= status ? status : 'Published' %></td>
                     <td><i class="fa-solid fa-ellipsis-vertical"></i></td>
                   </tr>
                 </tbody>
@@ -92,7 +92,9 @@
             </div>
           </div>
           <div class="container w-100">
-            <button class="btn bg-primary" style="color: #FFFDF6;">Create post</button>
+            <a  href="http://localhost:6800/api/v1/blog/post">
+            <button class="btn bg-primary text-decoration-none" style="color: #FFFDF6;">Create post</button>
+            </a>
           </div>
       </div>
       </div>
@@ -101,7 +103,7 @@
           <div class="userPic">
         </div>
         <div class="container d-flex flex-column gap-3">
-          <h2 class="d-block"><%= userName %></h2>
+          <h2 class="d-block" style="cursor: pointer;"><%= userName %></h2>
           <button class="btn borderd-box rounded">Edit Profile</button>
         </div>
           

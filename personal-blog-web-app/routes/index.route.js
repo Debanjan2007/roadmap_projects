@@ -1,5 +1,5 @@
 const express = require('express')
-const { loginUser } = require('../controller/login.controll.js')
+const { loginUser , addPost } = require('../controller/login.controll.js')
 
 
 const router = express.Router() ;
@@ -21,4 +21,9 @@ router.route('/contact').get(
     }
 )
 
+router.route('/post').get(
+    (req , res) => {
+        return res.render('blogpost')
+    }
+)
 module.exports = router ;

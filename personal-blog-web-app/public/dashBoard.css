@@ -23,15 +23,15 @@
 
 .horizontal-border th,
 .horizontal-border td {
-  border-top: 1px solid #ccc; /* top border for horizontal lines */
-  border-bottom: 1px solid #ccc; /* optional: bottom border too */
+  border-top: 1px solid #ccc; 
+  border-bottom: 1px solid #ccc;
   border-left: none;
   border-right: none;
   padding: 8px;
 }
 
 .horizontal-border thead tr:first-child th {
-  border-top: none; /* remove border above table header */
+  border-top: none; 
 }
 
 .userPic{
@@ -43,4 +43,10 @@
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
+    cursor: pointer;
+}
+.navBtn:hover{
+  transition: 1.5ms ease-in-out;
+  transform: scale(1.1);
+  border: 1px solid rgb(39, 91, 236);
 }
