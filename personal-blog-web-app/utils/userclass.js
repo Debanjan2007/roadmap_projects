@@ -1,8 +1,8 @@
 class UserObj {
-    constructor(userName , passWord , role ){
+    constructor(userName , passWord , role , token ){
         this.userName = userName ,
         this.passWord = passWord ,
-        this.role = role  || 'client' 
+        this.role = role  || 'client'
     }
 }
 

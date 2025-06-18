@@ -45,8 +45,17 @@
     background-repeat: no-repeat;
     cursor: pointer;
 }
+.navBtn{
+  transition: 0.23s ease-in-out;
+}
 .navBtn:hover{
-  transition: 1.5ms ease-in-out;
   transform: scale(1.1);
   border: 1px solid rgb(39, 91, 236);
+}
+.postBtn{
+  cursor: pointer;
+  transition: 0.5s ease-in-out;
+}
+.postBtn:hover{
+  transform: scale(1.1);
 }

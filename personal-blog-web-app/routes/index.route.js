@@ -1,6 +1,6 @@
 const express = require('express')
 const { loginUser , addPost } = require('../controller/login.controll.js')
-
+const verifyJwt = require('../middleware/verifyjwt.js')
 
 const router = express.Router() ;
 
@@ -27,6 +27,7 @@ router.route('/post').get(
     }
 )
 router.route('/post/publish').post(
+    verifyJwt ,
     addPost
 )
 module.exports = router ;
