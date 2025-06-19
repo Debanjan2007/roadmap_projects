@@ -5,21 +5,111 @@ const UserObj = require('../utils/userclass.js')
 const fs = require('fs')
 const createToken = require('../utils/jwtGen.js')
 const jwt = require('jsonwebtoken')
-const { userInfo } = require('os')
+const { userInfo, type } = require('os')
+const path = require('path')
+const Article = require('../utils/articleClass.js')
+
+
 // creates post 
 // make files for each user posts with their username for simplicity 
+
+const blogSFolder = path.join(__dirname, 'blogs');
+
 const addPost = asyncHandler(async (req, res) => {
-    const {userName , role} = req.user ;
-    console.log(userName);
-    return res
-    .status(200)
-    .json(
-        new ApiResponse(200 , userName , "successfull")
-    )
-    const {blogTitle , blogData} = req.body ;
-    
+    const { userName, role } = req.user;
+    const { blogTitle, blogData } = req.body;
+    try {
+        let ArticleData = null; // declaring the article object 
+        if (!fs.existsSync(blogSFolder)) {
+            fs.mkdirSync(blogSFolder, { recursive: true }, (err) => {
+                if (err) throw err;
+            })
+        }
+        // date in the form of YYYY-MM-DD HH:MM:SS 
+        const blogsPath = path.join(blogSFolder, `${userName}_blogs.json`)
+        const now = new Date();
+
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+
+        const formattedDate = `${year}-${month}-${day}`;
+        const formattedTime = `${hours}:${minutes}:${seconds}`
+        if (!fs.existsSync(blogsPath)) {
+
+
+            ArticleData = new Article(blogTitle, blogData, formattedDate, formattedTime)
+            fs.writeFileSync(blogsPath, JSON.stringify([ArticleData], null, 2), 'utf-8')
+            const formatedBlogData = blogData.slice(0, 10);
+            console.log(formatedBlogData);
+
+            return res
+                .redirect('http://localhost:6800/api/v1/blog/login');
+        } else {
+            const articles = JSON.parse(fs.readFileSync(blogsPath, 'utf-8'))
+            ArticleData = new Article(blogTitle, blogData, formattedDate, formattedTime);
+            articles.push(ArticleData);
+            fs.writeFileSync(blogsPath, JSON.stringify(articles, null, 2), 'utf-8')
+            return res
+                .redirect('http://localhost:6800/api/v1/blog/login');
+
+        }
+
+    } catch (error) {
+        return res
+            .status(500)
+            .json(
+                new ApiError(500, "Something went wrong")
+            )
+    }
 });
 
+// dashboard page redirect
+const dashBoard = async (req, res) => {
+    const { userName } = req.user;
+    const filePath = path.join(blogSFolder, `${userName}_blogs.json`)
+    console.log(typeof filePath);
+
+    const articleData = await JSON.parse(fs.readFileSync(filePath, 'utf-8', (err) => {
+        if (err) {
+            console.log(err);
+        }
+    }))
+
+    const articleLen = articleData.length;
+
+    const titleArr = [];
+    const dateArr = [];
+
+    for (let i = 0; i < 3; i++) {
+        if (articleData && articleData[i] && articleData[i].Title) {
+            titleArr.push(articleData[articleLen - (i+1)].Title)
+            dateArr.push(articleData[articleLen - (i+1)].date)
+        } else {
+            titleArr.push(null);
+            dateArr.push(null);
+        }
+    }
+
+    return res
+        .render('blogDashboard',
+            {
+                title: 'dashBoard',
+                userName: userName, // use the value you just set
+                blog: [
+                    { title: titleArr[0] , Date: dateArr[0] , status: titleArr[0] ? "published" : null},
+                    { title: titleArr[1] , Date: dateArr[1] , status: titleArr[1] ? "published" : null},
+                    { title: titleArr[2] , Date: dateArr[2] , status: titleArr[2] ? "published" : null},
+                ],
+                posts: articleLen,
+            })
+}
+
+// user log ini with username and password 
 const loginUser = asyncHandler(async (req, res) => {
     const { userName, password } = req.body;
 
@@ -70,7 +160,6 @@ const loginUser = asyncHandler(async (req, res) => {
                     { title: 'nil', Date: 'nil' },
                     { title: 'nil', Date: 'nil' },
                 ],
-                status: 'nil',
                 posts: null,
             });
         }
@@ -98,26 +187,8 @@ const loginUser = asyncHandler(async (req, res) => {
                     }
 
                 )
-                return res.render('blogDashboard', {
-                    title: 'dashBoard',
-                    userName: userName,
-                    blog: [
-                        {
-                            title: 'nil',
-                            Date: 'nil'
-                        },
-                        {
-                            title: 'nil',
-                            Date: 'nil'
-                        },
-                        {
-                            title: 'nil',
-                            Date: 'nil'
-                        },
-                    ],
-                    status: 'nil',
-                    posts: null,
-                });
+                return res
+                .redirect('http://localhost:6800/api/v1/blog/login');
             }
         }
 
@@ -147,26 +218,8 @@ const loginUser = asyncHandler(async (req, res) => {
             }
 
         )
-        return res.render('blogDashboard', {
-            title: 'dashBoard',
-            userName: userName,
-            blog: [
-                {
-                    title: 'nil',
-                    Date: 'nil'
-                },
-                {
-                    title: 'nil',
-                    Date: 'nil'
-                },
-                {
-                    title: 'nil',
-                    Date: 'nil'
-                },
-            ],
-            status: 'nil',
-            posts: null,
-        });
+        return res
+        .redirect('http://localhost:6800/api/v1/blog/login');
 
     } catch (error) {
         return res.render('errorpage', {
@@ -178,8 +231,14 @@ const loginUser = asyncHandler(async (req, res) => {
     }
 });
 
+// my posts 
+const myPosts = () => {
+    // something 
+}
 
 module.exports = {
     loginUser,
-    addPost
+    addPost,
+    dashBoard ,
+    myPosts
 }
