@@ -8,6 +8,8 @@ const jwt = require('jsonwebtoken')
 const { userInfo, type } = require('os')
 const path = require('path')
 const Article = require('../utils/articleClass.js')
+const { title } = require('process')
+const { threadId } = require('worker_threads')
 
 
 // creates post 
@@ -232,8 +234,34 @@ const loginUser = asyncHandler(async (req, res) => {
 });
 
 // my posts 
-const myPosts = () => {
-    // something 
+const myPosts = (req , res) => {
+    const {userName} = req.user ;
+    if(!fs.existsSync(blogSFolder)){
+        return res
+        .render('myposts' ,{
+            posts: [
+                {
+                Title: 'No posts found',
+                date: 'N/A',
+                data: 'No posts available for this user.'
+            }
+         ]
+        })
+    }
+    const filePath = path.join(blogSFolder, `${userName}_blogs.json`);
+    const posts = JSON.parse(fs.readFileSync(filePath, 'utf-8' , (err) => {
+        if (err) {
+            return res
+            .status(500)
+            .json(
+                new ApiError(500, "Something went wrong while reading the posts")
+            )
+        }
+    }))
+    return res
+    .render('myposts', {
+        posts: posts 
+    })
 }
 
 module.exports = {
