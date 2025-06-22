@@ -75,7 +75,7 @@ const dashBoard = async (req, res) => {
     const { userName } = req.user;
     const filePath = path.join(blogSFolder, `${userName}_blogs.json`)
 
-    if(!fs.existsSync(filePath)){
+    if (!fs.existsSync(filePath)) {
         return res
             .render('blogDashboard', {
                 title: 'dashBoard',
@@ -252,7 +252,7 @@ const myPosts = (req, res) => {
     if (!fs.existsSync(blogSFolder) || !fs.existsSync(filePath)) {
         return res
             .render('myposts', {
-                
+
                 posts: [
                     {
                         id: 'N/A',
@@ -263,7 +263,7 @@ const myPosts = (req, res) => {
                 ]
             })
     }
-    
+
     const posts = JSON.parse(fs.readFileSync(filePath, 'utf-8', (err) => {
         if (err) {
             return res
@@ -284,9 +284,52 @@ const myPosts = (req, res) => {
 }
 
 // delete post by role based checking 
+const delPost = (req, res) => {
+    const { userName, role } = req.user;
+    const { id } = req.params;
+    console.log("deleting post with id: ", id , role , userName);
+    
+    if (role != 'admin') {
+        const filePath = path.join(blogSFolder, `${userName}_blogs.json`);
+        console.log(filePath);
+        
+        if (!fs.existsSync(filePath)) {
+            return res
+                .status(401)
+                .json(
+                    new ApiError(401, "You are not authorized to delete this post or the post does not exist on your account")
+                )
+        }
+        
+        const posts = JSON.parse(fs.readFileSync(filePath, 'utf-8', (err) => {
+            throw new ApiError(500, "Something went wrong while reading the posts")
+        }))
+        
+        const postindex = posts.findIndex(post => {return post.id === id});
+        console.log("postindex: ", postindex);
+        
+        for (let postMatched of posts) {
+            console.log(postMatched , id);
+            
+            // if (postMatched.id === id) {
+            //     posts.splice(postindex , 1);
+            //     fs.writeFileSync(filePath, JSON.stringify(posts, null, 2), 'utf-8');
+            //     console.log("deleted post with id: ", id);
+                
+            //     return res
+            //     .render('myposts', {
+            //         posts: posts
+            //     })
+            // }
+        }
+    }
+
+
+}
 module.exports = {
     loginUser,
     addPost,
     dashBoard,
-    myPosts
+    myPosts, 
+    delPost
 }

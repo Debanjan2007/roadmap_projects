@@ -1,5 +1,5 @@
 const express = require('express')
-const { loginUser , addPost , dashBoard , myPosts} = require('../controller/login.controll.js')
+const { loginUser , addPost , dashBoard , myPosts , delPost} = require('../controller/login.controll.js')
 const verifyJwt = require('../middleware/verifyjwt.js')
 
 const router = express.Router() ;
@@ -46,7 +46,8 @@ router.route('/post/publish').post(
 )
 
 // to delete a post of your own if a user is logged in and is the author of the post
-router.route('/post/del/:id').get(
-    verifyJwt 
+router.route('/post/del/:id').post(
+    verifyJwt ,
+    delPost
 )
 module.exports = router ;
