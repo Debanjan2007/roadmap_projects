@@ -74,8 +74,20 @@ const addPost = asyncHandler(async (req, res) => {
 const dashBoard = async (req, res) => {
     const { userName } = req.user;
     const filePath = path.join(blogSFolder, `${userName}_blogs.json`)
-    console.log(typeof filePath);
 
+    if(!fs.existsSync(filePath)){
+        return res
+            .render('blogDashboard', {
+                title: 'dashBoard',
+                userName: userName, // use the value you just set
+                blog: [
+                    { title: 'nil', Date: 'nil', status: null },
+                    { title: 'nil', Date: 'nil', status: null },
+                    { title: 'nil', Date: 'nil', status: null },
+                ],
+                posts: 0,
+            })
+    }
     const articleData = await JSON.parse(fs.readFileSync(filePath, 'utf-8', (err) => {
         if (err) {
             console.log(err);
@@ -89,8 +101,8 @@ const dashBoard = async (req, res) => {
 
     for (let i = 0; i < 3; i++) {
         if (articleData && articleData[i] && articleData[i].Title) {
-            titleArr.push(articleData[articleLen - (i+1)].Title)
-            dateArr.push(articleData[articleLen - (i+1)].date)
+            titleArr.push(articleData[articleLen - (i + 1)].Title)
+            dateArr.push(articleData[articleLen - (i + 1)].date)
         } else {
             titleArr.push(null);
             dateArr.push(null);
@@ -103,9 +115,9 @@ const dashBoard = async (req, res) => {
                 title: 'dashBoard',
                 userName: userName, // use the value you just set
                 blog: [
-                    { title: titleArr[0] , Date: dateArr[0] , status: titleArr[0] ? "published" : null},
-                    { title: titleArr[1] , Date: dateArr[1] , status: titleArr[1] ? "published" : null},
-                    { title: titleArr[2] , Date: dateArr[2] , status: titleArr[2] ? "published" : null},
+                    { title: titleArr[0], Date: dateArr[0], status: titleArr[0] ? "published" : null },
+                    { title: titleArr[1], Date: dateArr[1], status: titleArr[1] ? "published" : null },
+                    { title: titleArr[2], Date: dateArr[2], status: titleArr[2] ? "published" : null },
                 ],
                 posts: articleLen,
             })
@@ -190,7 +202,7 @@ const loginUser = asyncHandler(async (req, res) => {
 
                 )
                 return res
-                .redirect('http://localhost:6800/api/v1/blog/login');
+                    .redirect('http://localhost:6800/api/v1/blog/login');
             }
         }
 
@@ -221,7 +233,7 @@ const loginUser = asyncHandler(async (req, res) => {
 
         )
         return res
-        .redirect('http://localhost:6800/api/v1/blog/login');
+            .redirect('http://localhost:6800/api/v1/blog/login');
 
     } catch (error) {
         return res.render('errorpage', {
@@ -234,39 +246,47 @@ const loginUser = asyncHandler(async (req, res) => {
 });
 
 // my posts 
-const myPosts = (req , res) => {
-    const {userName} = req.user ;
-    if(!fs.existsSync(blogSFolder)){
-        return res
-        .render('myposts' ,{
-            posts: [
-                {
-                Title: 'No posts found',
-                date: 'N/A',
-                data: 'No posts available for this user.'
-            }
-         ]
-        })
-    }
+const myPosts = (req, res) => {
+    const { userName } = req.user;
     const filePath = path.join(blogSFolder, `${userName}_blogs.json`);
-    const posts = JSON.parse(fs.readFileSync(filePath, 'utf-8' , (err) => {
+    if (!fs.existsSync(blogSFolder) || !fs.existsSync(filePath)) {
+        return res
+            .render('myposts', {
+                
+                posts: [
+                    {
+                        id: 'N/A',
+                        Title: 'No posts found',
+                        date: 'N/A',
+                        data: 'No posts available for this user.'
+                    }
+                ]
+            })
+    }
+    
+    const posts = JSON.parse(fs.readFileSync(filePath, 'utf-8', (err) => {
         if (err) {
             return res
-            .status(500)
-            .json(
-                new ApiError(500, "Something went wrong while reading the posts")
-            )
+                .status(500)
+                .json(
+                    new ApiError(500, "Something went wrong while reading the posts")
+                )
         }
     }))
     return res
-    .render('myposts', {
-        posts: posts 
-    })
+        .render('myposts', {
+            posts: posts || [
+                { title: null, Date: null, status: null },
+                { title: null, Date: null, status: null },
+                { title: null, Date: null, status: null },
+            ]
+        })
 }
 
+// delete post by role based checking 
 module.exports = {
     loginUser,
     addPost,
-    dashBoard ,
+    dashBoard,
     myPosts
 }

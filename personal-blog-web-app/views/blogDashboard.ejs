@@ -69,22 +69,25 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td><%= blog[0].title %></td>
-                    <td><%= blog[0].Date %></td>
+                    <td><%= blog[0].title || 'nil' %></td>
+                    <td><%= blog[0].Date || 'nil' %></td>
                     <td><%= blog[0].status ? blog[0].status : 'nil' %></td>
-                    <td><i class="fa-solid fa-ellipsis-vertical"></i></td>
+                    <td><a href="" class="text-decoration-none" style="color: black;"><i class="fa-solid fa-pen"></i></a></td>
+                    <td><a href="" class="text-decoration-none" style="color: black;"><i class="fa-solid fa-trash"></i></a></td>
                   </tr>
                   <tr>
-                    <td><%= blog[1].title %></td>
-                    <td><%= blog[1].Date %></td>
-                     <td><%= blog[0].status ? blog[0].status : 'nil' %></td>
-                    <td><i class="fa-solid fa-ellipsis-vertical"></i></td>
+                    <td><%= blog[1].title || 'nil' %></td>
+                    <td><%= blog[1].Date || 'nil' %></td>
+                     <td><%= blog[1].status ? blog[1].status : 'nil' %></td>
+                    <td><a href="" class="text-decoration-none" style="color: black;"><i class="fa-solid fa-pen"></i></a></td>
+                    <td><a href="" class="text-decoration-none" style="color: black;"><i class="fa-solid fa-trash"></i></a></td>
                   </tr>
                    <tr>
-                    <td><%= blog[2].title %></td>
-                    <td><%= blog[2].Date %></td>
-                     <td><%= blog[0].status ? blog[0].status : 'nil' %></td>
-                    <td><i class="fa-solid fa-ellipsis-vertical"></i></td>
+                    <td><%= blog[2].title || 'nil' %></td>
+                    <td><%= blog[2].Date || 'nil' %></td>
+                     <td><%= blog[2].status ? blog[2].status : 'nil' %></td>
+                    <td><a href="" class="text-decoration-none" style="color: black;"><i class="fa-solid fa-pen"></i></a></td>
+                    <td><a href="" class="text-decoration-none" style="color: black;"><i class="fa-solid fa-trash"></i></a></td>
                   </tr>
                 </tbody>
               </table>
@@ -117,5 +120,6 @@
     integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
     crossorigin="anonymous"></script>
 </body>
-
+<script src="/dashboard.js">
+</script>
 </html>

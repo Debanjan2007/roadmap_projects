@@ -52,3 +52,13 @@
       height: 100vh;
       scrollbar-width: none;
     }
+    .containerdelupdate {
+      width: 100%;
+    }
+    .containerdelupdate > button {
+      padding: 0.5rem;
+      border-radius: 50%;
+      background: transparent;
+      border: none;
+
+    }

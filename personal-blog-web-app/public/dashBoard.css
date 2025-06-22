@@ -59,3 +59,6 @@
 .postBtn:hover{
   transform: scale(1.1);
 }
+.option-icon {
+  cursor: pointer;
+}
