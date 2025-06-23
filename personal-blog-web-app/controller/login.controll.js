@@ -79,7 +79,7 @@ const dashBoard = async (req, res) => {
         return res
             .render('blogDashboard', {
                 title: 'dashBoard',
-                userName: userName, // use the value you just set
+                userName: userName, // use the value you just set 
                 blog: [
                     { title: 'nil', Date: 'nil', status: null },
                     { title: 'nil', Date: 'nil', status: null },
@@ -284,14 +284,11 @@ const myPosts = (req, res) => {
 }
 
 // delete post by role based checking 
-const delPost = (req, res) => {
-    const { userName, role } = req.user;
+const delPost = asyncHandler(async (req, res) => {
+    const { userName} = req.user;
     const { id } = req.params;
-    console.log("deleting post with id: ", id , role , userName);
     
-    if (role != 'admin') {
-        const filePath = path.join(blogSFolder, `${userName}_blogs.json`);
-        console.log(filePath);
+        const filePath = path.join(blogSFolder, `${userName}_blogs.json`)
         
         if (!fs.existsSync(filePath)) {
             return res
@@ -305,31 +302,74 @@ const delPost = (req, res) => {
             throw new ApiError(500, "Something went wrong while reading the posts")
         }))
         
-        const postindex = posts.findIndex(post => {return post.id === id});
-        console.log("postindex: ", postindex);
-        
         for (let postMatched of posts) {
-            console.log(postMatched , id);
             
-            // if (postMatched.id === id) {
-            //     posts.splice(postindex , 1);
-            //     fs.writeFileSync(filePath, JSON.stringify(posts, null, 2), 'utf-8');
-            //     console.log("deleted post with id: ", id);
-                
-            //     return res
-            //     .render('myposts', {
-            //         posts: posts
-            //     })
-            // }
+            if(postMatched.id === Number(id)){
+            indexOfPost = posts.indexOf(postMatched);
+            posts.splice(indexOfPost, 1);
+            fs.writeFileSync(filePath, JSON.stringify(posts, null, 2), 'utf-8');
+            
+            return res
+            .redirect('http://localhost:6800/api/v1/blog/login');
+            }
         }
+})
+const gotoUpdatePage = asyncHandler(async (req , res) => {
+    const { userName } = req.user ;
+    const { id } = req.params ;
+    try {
+        const filePath = path.join(blogSFolder, `${userName}_blogs.json`) ;
+        
+        if(!fs.existsSync(filePath)){
+            return res
+                .status(404)
+                .json(
+                    new ApiError(404, "You are not authorized to update this post or the post does not exist on your account")
+                )
+        }
+        console.log("file exists");
+        
+        const posts = JSON.parse(fs.readFileSync(filePath , 'utf-8', (e) => {
+            if(e){
+                return res
+                    .status(500)
+                    .json(
+                        new ApiError(500, "Something went wrong while reading the posts")
+                    )
+            }
+        }))
+    
+        
+    
+        for(let postMatched of posts){
+            if(postMatched.id === Number(id)){
+                console.log("post matched" , postMatched.Title);
+                
+                return res
+                    .render('blogUpdate' , {
+                        blog: {
+                            id: postMatched.id,
+                            userName: userName,
+                            title: postMatched.Title ,
+                            data: postMatched.data
+                        }
+                    })
+            }
+        }
+    } catch (error) {
+        console.error("Error occurred while navigating to update page:", error);
+        return res
+            .status(500)
+            .json(
+                new ApiError(500, "Something went wrong while navigating to the update page")
+            )
     }
-
-
-}
+})
 module.exports = {
     loginUser,
     addPost,
     dashBoard,
     myPosts, 
-    delPost
+    delPost, 
+    gotoUpdatePage
 }
