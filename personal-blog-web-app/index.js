@@ -2,6 +2,7 @@ const express = require('express')
 const path = require('path')
 const dotenv = require('dotenv').config() ;
 const cookieParser = require('cookie-parser')
+const bodyParser = require('body-parser') 
 
 const app = express() ;
 
@@ -9,8 +10,11 @@ const app = express() ;
 const router = require('./routes/index.route.js')
 
 // app parsing 
+
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine', 'ejs') // ejs setup
 app.use(cookieParser())
 // conecting static files and markup files 

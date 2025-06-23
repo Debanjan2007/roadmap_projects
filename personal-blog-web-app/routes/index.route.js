@@ -1,5 +1,5 @@
 const express = require('express')
-const { loginUser , addPost , dashBoard , myPosts , delPost , gotoUpdatePage} = require('../controller/login.controll.js')
+const { loginUser , addPost , dashBoard , myPosts , delPost , gotoUpdatePage , updatePost} = require('../controller/login.controll.js')
 const verifyJwt = require('../middleware/verifyjwt.js')
 
 const router = express.Router() ;
@@ -55,5 +55,11 @@ router.route('/post/del/:id').post(
 router.route('/post/update/:id').get(
     verifyJwt ,
     gotoUpdatePage
+)
+
+// update a post 
+router.route('/post/update/:id').post(
+    verifyJwt ,
+    updatePost
 )
 module.exports = router ;

@@ -21,18 +21,21 @@
 <body>
     <div class="container-fluid">
         <h3>Update your blog</h3>
-        <div class="form-floating mb-3 mt-3">
-            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" value="<%= blog.title %>">
-            <label for="floatingInput">Blog title</label>
-        </div>
-        <div class="form-floating">
-            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2"
-                style="height: 300px"><%= blog.data %></textarea>
-            <label for="floatingTextarea2">ExistingBlog</label>
-        </div>
-        <div class="row mt-4 m-1">
-            <button type="submit" class="btn btn-primary">Update</button>
-        </div>
+        <form method="POST" action="http://localhost:6800/api/v1/blog/post/update/<%= blog.id %>">
+            <div class="form-floating mb-3 mt-3">
+                <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com"
+                    name="Blogtitle" value="<%= blog.title %>">
+                <label for="floatingInput">Blog title</label>
+            </div>
+            <div class="form-floating">
+                <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2"
+                    style="height: 300px" name="BlogData"><%= blog.data %></textarea>
+                <label for="floatingTextarea2">ExistingBlog</label>
+            </div>
+            <div class="row mt-4 m-1">
+                <button type="submit" class="btn btn-primary">Update</button>
+            </div>
+        </form>
     </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"

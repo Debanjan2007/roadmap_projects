@@ -365,11 +365,77 @@ const gotoUpdatePage = asyncHandler(async (req , res) => {
             )
     }
 })
+
+// update function 
+const updatePost = asyncHandler(async (req , res) => {
+    const { userName } = req.user ;
+    const { id } = req.params ;
+    const { Blogtitle , BlogData } = req.body ;
+    const filePath = path.join(blogSFolder , `${userName}_blogs.json`) ;
+
+    if(!fs.existsSync(filePath)){
+        return res
+            .status(404)
+            .json(
+                new ApiError(404, "You are not authorized to update this post or the post does not exist on your account")
+            )
+    }
+
+    const posts = JSON.parse(fs.readFileSync(filePath , 'utf-8' , (e) => {
+        if(e) {
+            console.log("Error reading posts:", e);
+            return res
+                .status(500)
+                .json(
+                    new ApiError(500, "Something went wrong while reading the posts")
+                )
+        }
+    }))
+    for(let postMatched of posts) {
+        if(postMatched.id === Number(id)){
+            console.log(req.body.BlogData);
+            
+            const now = new Date();
+
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+
+        const formattedDate = `${year}-${month}-${day}`;
+        const formattedTime = `${hours}:${minutes}:${seconds}`
+            postMatched.Title = Blogtitle ;
+            postMatched.data = req.body.BlogData ; 
+            postMatched.data = formattedDate ;
+            postMatched.time = formattedTime ;
+            postMatched.status = 'updated' ;
+            console.log("Post updated successfully:", postMatched);
+        }
+    }
+
+    fs.writeFileSync(filePath , JSON.stringify(posts , null , 2) , 'utf-8' , (e) => {
+        if(e){
+            console.log("Error writing updated posts:", e);
+            return res
+                .status(500)
+                .json(
+                    new ApiError(500, "Something went wrong while updating the post")
+                )
+        }
+    })
+    return res
+        .redirect('http://localhost:6800/api/v1/blog/login');
+
+})
 module.exports = {
     loginUser,
     addPost,
     dashBoard,
     myPosts, 
     delPost, 
-    gotoUpdatePage
+    gotoUpdatePage ,
+    updatePost 
 }
