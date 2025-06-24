@@ -1,0 +1,24 @@
+* {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Sofia", sans-serif;
+}
+.container-fluid{
+    height: 100vh;
+    width: 100vw;
+    overflow-y: scroll;
+    padding: 1% 23% 1% 23%;
+}
+.postContainer{
+    width: 100%;
+    height: auto;
+    border: 1px solid #000000;
+    background-color: #ccc;
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2)
+}
+.blogTitle > p {
+    color: #353535e7;
+    font-weight: 600;
+    font-size: 1rem;
+}

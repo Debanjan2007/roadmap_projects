@@ -31,7 +31,7 @@
             class="nav-link px-3 py-2 border rounded text-dark">DashBoard</a>
         </li>
         <li class="nav-item mb-2">
-          <a class="nav-link px-3 py-2 border rounded text-dark" href="#">Home</a>
+          <a class="nav-link px-3 py-2 border rounded text-dark" href="http://localhost:6800/api/v1/blog/home">Home</a>
         </li>
         <li class="nav-item mb-2">
           <a class="nav-link px-3 py-2 border border-primary rounded text-primary bg-white" href="#">My Posts</a>
@@ -55,7 +55,7 @@
                 </h4>
               </div>
               <div class="date" style="color: #282727b6;">
-                <%= post.date %> : <%= post.time %> <i class="fa-solid fa-calendar"></i>
+                <%= post.createdAt %> <i class="fa-solid fa-calendar"></i>
               </div>
             </div>
             <div class="myPostData bg-light text-center text-capitalize rounded p-2" style="width: 100%;">

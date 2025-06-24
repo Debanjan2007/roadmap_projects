@@ -10,7 +10,21 @@ const path = require('path')
 const Article = require('../utils/articleClass.js')
 const { title } = require('process')
 const { threadId } = require('worker_threads')
+const { create } = require('domain')
 
+const CurrentDateTime = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+
+    const dateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    return dateTime;
+}
 
 // creates post 
 // make files for each user posts with their username for simplicity 
@@ -27,33 +41,22 @@ const addPost = asyncHandler(async (req, res) => {
                 if (err) throw err;
             })
         }
-        // date in the form of YYYY-MM-DD HH:MM:SS 
-        const blogsPath = path.join(blogSFolder, `${userName}_blogs.json`)
-        const now = new Date();
-
-        const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2, '0');
-        const day = String(now.getDate()).padStart(2, '0');
-
-        const hours = String(now.getHours()).padStart(2, '0');
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-        const seconds = String(now.getSeconds()).padStart(2, '0');
-
-        const formattedDate = `${year}-${month}-${day}`;
-        const formattedTime = `${hours}:${minutes}:${seconds}`
+        // date in the form of YYYY-MM-DD HH:MM:SS
+        const blogsPath = path.join(blogSFolder, `${userName}_blogs.json`);
+        const createdAt = CurrentDateTime();
         if (!fs.existsSync(blogsPath)) {
 
 
-            ArticleData = new Article(blogTitle, blogData, formattedDate, formattedTime)
+            ArticleData = new Article(blogTitle, blogData, createdAt)
             fs.writeFileSync(blogsPath, JSON.stringify([ArticleData], null, 2), 'utf-8')
             const formatedBlogData = blogData.slice(0, 10);
-            console.log(formatedBlogData);
+
 
             return res
                 .redirect('http://localhost:6800/api/v1/blog/login');
         } else {
             const articles = JSON.parse(fs.readFileSync(blogsPath, 'utf-8'))
-            ArticleData = new Article(blogTitle, blogData, formattedDate, formattedTime);
+            ArticleData = new Article(blogTitle, blogData, createdAt)
             articles.push(ArticleData);
             fs.writeFileSync(blogsPath, JSON.stringify(articles, null, 2), 'utf-8')
             return res
@@ -62,6 +65,8 @@ const addPost = asyncHandler(async (req, res) => {
         }
 
     } catch (error) {
+        console.log(error);
+        
         return res
             .status(500)
             .json(
@@ -102,7 +107,7 @@ const dashBoard = async (req, res) => {
     for (let i = 0; i < 3; i++) {
         if (articleData && articleData[i] && articleData[i].Title) {
             titleArr.push(articleData[articleLen - (i + 1)].Title)
-            dateArr.push(articleData[articleLen - (i + 1)].date)
+            dateArr.push(articleData[articleLen - (i + 1)].createdAt)
         } else {
             titleArr.push(null);
             dateArr.push(null);
@@ -285,52 +290,54 @@ const myPosts = (req, res) => {
 
 // delete post by role based checking 
 const delPost = asyncHandler(async (req, res) => {
-    const { userName} = req.user;
+    const { userName } = req.user;
     const { id } = req.params;
-    
-        const filePath = path.join(blogSFolder, `${userName}_blogs.json`)
-        
-        if (!fs.existsSync(filePath)) {
-            return res
-                .status(401)
-                .json(
-                    new ApiError(401, "You are not authorized to delete this post or the post does not exist on your account")
-                )
-        }
-        
-        const posts = JSON.parse(fs.readFileSync(filePath, 'utf-8', (err) => {
-            throw new ApiError(500, "Something went wrong while reading the posts")
-        }))
-        
-        for (let postMatched of posts) {
-            
-            if(postMatched.id === Number(id)){
+
+    const filePath = path.join(blogSFolder, `${userName}_blogs.json`)
+
+    if (!fs.existsSync(filePath)) {
+        return res
+            .status(401)
+            .json(
+                new ApiError(401, "You are not authorized to delete this post or the post does not exist on your account")
+            )
+    }
+
+    const posts = JSON.parse(fs.readFileSync(filePath, 'utf-8', (err) => {
+        throw new ApiError(500, "Something went wrong while reading the posts")
+    }))
+
+    for (let postMatched of posts) {
+
+        if (postMatched.id === Number(id)) {
             indexOfPost = posts.indexOf(postMatched);
             posts.splice(indexOfPost, 1);
             fs.writeFileSync(filePath, JSON.stringify(posts, null, 2), 'utf-8');
-            
+
             return res
-            .redirect('http://localhost:6800/api/v1/blog/login');
-            }
+                .redirect('http://localhost:6800/api/v1/blog/login');
         }
+    }
 })
-const gotoUpdatePage = asyncHandler(async (req , res) => {
-    const { userName } = req.user ;
-    const { id } = req.params ;
+
+// goto update page
+const gotoUpdatePage = asyncHandler(async (req, res) => {
+    const { userName } = req.user;
+    const { id } = req.params;
     try {
-        const filePath = path.join(blogSFolder, `${userName}_blogs.json`) ;
-        
-        if(!fs.existsSync(filePath)){
+        const filePath = path.join(blogSFolder, `${userName}_blogs.json`);
+
+        if (!fs.existsSync(filePath)) {
             return res
                 .status(404)
                 .json(
                     new ApiError(404, "You are not authorized to update this post or the post does not exist on your account")
                 )
         }
-        console.log("file exists");
-        
-        const posts = JSON.parse(fs.readFileSync(filePath , 'utf-8', (e) => {
-            if(e){
+
+
+        const posts = JSON.parse(fs.readFileSync(filePath, 'utf-8', (e) => {
+            if (e) {
                 return res
                     .status(500)
                     .json(
@@ -338,19 +345,17 @@ const gotoUpdatePage = asyncHandler(async (req , res) => {
                     )
             }
         }))
-    
-        
-    
-        for(let postMatched of posts){
-            if(postMatched.id === Number(id)){
-                console.log("post matched" , postMatched.Title);
-                
+
+
+
+        for (let postMatched of posts) {
+            if (postMatched.id === Number(id)) {
                 return res
-                    .render('blogUpdate' , {
+                    .render('blogUpdate', {
                         blog: {
                             id: postMatched.id,
                             userName: userName,
-                            title: postMatched.Title ,
+                            title: postMatched.Title,
                             data: postMatched.data
                         }
                     })
@@ -367,13 +372,13 @@ const gotoUpdatePage = asyncHandler(async (req , res) => {
 })
 
 // update function 
-const updatePost = asyncHandler(async (req , res) => {
-    const { userName } = req.user ;
-    const { id } = req.params ;
-    const { Blogtitle , BlogData } = req.body ;
-    const filePath = path.join(blogSFolder , `${userName}_blogs.json`) ;
+const updatePost = asyncHandler(async (req, res) => {
+    const { userName } = req.user;
+    const { id } = req.params;
+    const { Blogtitle, BlogData } = req.body;
+    const filePath = path.join(blogSFolder, `${userName}_blogs.json`);
 
-    if(!fs.existsSync(filePath)){
+    if (!fs.existsSync(filePath)) {
         return res
             .status(404)
             .json(
@@ -381,8 +386,8 @@ const updatePost = asyncHandler(async (req , res) => {
             )
     }
 
-    const posts = JSON.parse(fs.readFileSync(filePath , 'utf-8' , (e) => {
-        if(e) {
+    const posts = JSON.parse(fs.readFileSync(filePath, 'utf-8', (e) => {
+        if (e) {
             console.log("Error reading posts:", e);
             return res
                 .status(500)
@@ -391,33 +396,19 @@ const updatePost = asyncHandler(async (req , res) => {
                 )
         }
     }))
-    for(let postMatched of posts) {
-        if(postMatched.id === Number(id)){
-            console.log(req.body.BlogData);
-            
-            const now = new Date();
+    for (let postMatched of posts) {
+        if (postMatched.id === Number(id)) {
+            const updatedAt = CurrentDateTime();
 
-        const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2, '0');
-        const day = String(now.getDate()).padStart(2, '0');
-
-        const hours = String(now.getHours()).padStart(2, '0');
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-        const seconds = String(now.getSeconds()).padStart(2, '0');
-
-        const formattedDate = `${year}-${month}-${day}`;
-        const formattedTime = `${hours}:${minutes}:${seconds}`
-            postMatched.Title = Blogtitle ;
-            postMatched.data = req.body.BlogData ; 
-            postMatched.data = formattedDate ;
-            postMatched.time = formattedTime ;
-            postMatched.status = 'updated' ;
-            console.log("Post updated successfully:", postMatched);
+            postMatched.Title = Blogtitle;
+            postMatched.data = BlogData;
+            postMatched.updatedAt = updatedAt;
+            postMatched.status = 'updated';
         }
     }
 
-    fs.writeFileSync(filePath , JSON.stringify(posts , null , 2) , 'utf-8' , (e) => {
-        if(e){
+    fs.writeFileSync(filePath, JSON.stringify(posts, null, 2), 'utf-8', (e) => {
+        if (e) {
             console.log("Error writing updated posts:", e);
             return res
                 .status(500)
@@ -430,12 +421,75 @@ const updatePost = asyncHandler(async (req , res) => {
         .redirect('http://localhost:6800/api/v1/blog/login');
 
 })
+
+// home page redirect
+const homePage = asyncHandler(async (req, res) => {
+    const postArr = [];
+    const BlogFiles = fs.readdirSync(blogSFolder);
+    BlogFiles.forEach(file => {
+        const filePath = path.join(blogSFolder, file);
+        const posts = JSON.parse(fs.readFileSync(filePath, 'utf-8', (e) => {
+            if (e) {
+                console.log("Error reading posts:", e);
+                return res
+                    .status(500)
+                    .json(
+                        new ApiError(500, "Something went wrong while reading the posts")
+                    )
+            }
+        }))
+        const userName = file.split('_')[0]; // Extract username from the file name
+
+        posts.forEach(post => {
+            const currentDate = CurrentDateTime();
+            const isoString = currentDate.replace(' ', 'T');  // Replace space with 'T' to make it ISO-compatible 
+            const dateObj = new Date(isoString);  // Create a Date object
+            const millis = dateObj.getTime(); // get miliseconds from the date object
+
+            const createdAt = post.createdAt.replace(' ', 'T');
+            const createdAtObj = new Date(createdAt);
+            const createdAtMillis = createdAtObj.getTime();
+            if (millis - createdAtMillis < 48 * 60 * 60 * 1000) { // Check if the post is within the last 24 hours
+                postArr.push({
+                    userName: userName,
+                    blog: post
+                })
+            }
+        })
+    })
+    if(postArr.length != 0){
+         return res
+                    .render('homePage', {
+                        title: 'Home',
+                        posts: postArr,
+                    });
+    }
+    else{
+        return res
+            .render('homePage', {
+                title: 'Home',
+                posts: [
+                    {
+                        userName: 'No posts found',
+                        blog: {
+                            id: 'N/A',
+                            Title: 'No posts found',
+                            createdAt: 'N/A',
+                            data: 'No posts available for this user.'
+                        }
+                    }
+                ],
+            });
+    }
+
+})
 module.exports = {
     loginUser,
     addPost,
     dashBoard,
-    myPosts, 
-    delPost, 
-    gotoUpdatePage ,
-    updatePost 
+    myPosts,
+    delPost,
+    gotoUpdatePage,
+    updatePost ,
+    homePage
 }
