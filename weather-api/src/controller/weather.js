@@ -18,7 +18,6 @@ const getWeatherDetail = asyncHandler( async (req , res) => {
     console.log(LOCATION);
     
     const cacheData = await client.get(LOCATION) ;
-    console.log(cacheData);
     
     if(cacheData){
         return res 
