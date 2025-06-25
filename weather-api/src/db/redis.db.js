@@ -9,7 +9,6 @@ const client = new Redis({
     token: token
 })
 
-
 export {
     client 
 }

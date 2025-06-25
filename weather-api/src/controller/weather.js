@@ -2,6 +2,8 @@ import { apiError } from "../../utils/apierr.js";
 import { asyncHandler } from "../../utils/asynchandler.js";
 import { client } from "../db/redis.db.js";
 import { apiResponse } from "../../utils/apiresp.js";
+import weatherResponse from "../../utils/weatherResponse.class.js";
+
 
 const getWeatherDetail = asyncHandler( async (req , res) => {
     if(!req.params){
@@ -11,8 +13,20 @@ const getWeatherDetail = asyncHandler( async (req , res) => {
             new apiError(404 , { success : false } , "Please tell your location!")
         )
     }
-    let { LOCATION } = req.params ;
+    const { LOCATION } = req.params ;
 
+    console.log(LOCATION);
+    
+    const cacheData = await client.get(LOCATION) ;
+    console.log(cacheData);
+    
+    if(cacheData){
+        return res 
+        .status(200)
+        .json(
+            new apiResponse(200 , cacheData , "Data has been added the the db")
+        )
+    }
     // api key & url for the third party weather api 
     const apiKey = process.env.API_KEY ;
     const URL =`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${LOCATION.trim()}/today?unitGroup=metric&include=days,current&key=${apiKey}&contentType=json`
@@ -20,32 +34,26 @@ const getWeatherDetail = asyncHandler( async (req , res) => {
     fetch(URL)
     .then(async (event) => {
         const data = await event.json() ;        
-        
+        const weatherData = new weatherResponse(
+            data.resolvedAddress ,
+            data.days[0].datetime ,
+            data.days[0] ,
+            data.currentConditions ,
+        )
 
-        await client.set(LOCATION , data) ;
-        await client.expire(LOCATION , process.env.REDIS_EXPIY)
-        
-        console.log(data);
-
-
-        console.log(clientSet , clientExpirySet);
-        
-        if(!clientExpirySet && !clientSet){
-            return res
-            .status(501)
-            .json(
-                apiError(501 , {success : false} , "something went wrong! in DB")
-            )
-        }
+        await client.set(LOCATION , JSON.stringify(weatherData , null , 2)) ;
+        await client.expire(LOCATION , parseInt(process.env.REDIS_EXPIY))
         
 
         return res
         .status(200)
         .json(
-            apiResponse(200 , data , "Data has been added the the db")
+            new apiResponse(200 , weatherData , "Data has been added the the db")
         )
     })
     .catch((err) => {
+        console.log(err);
+        
         return res
         .status(500)
         .json(
