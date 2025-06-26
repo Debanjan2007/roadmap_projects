@@ -3,7 +3,7 @@ const { Command } = require('commander'); // importing command from the 'command
 const program = new Command();
 const { addExpense } = require('./controller/addExpense.controller.js'); // importing the addExpense function from the controller
 const { listData } = require('./controller/expenseDataList.controller.js')
-const { summaryexpense } = require('./controller/summary.controller.js')
+const { summaryexpense , summaryOFmonth } = require('./controller/summary.controller.js')
 
 
 // setting up the program with a description 
@@ -36,6 +36,10 @@ program
             summaryexpense() ;
         }
     )
+    .option('-m, --month <add the month code here>', 'Month to calculate the summary by month' , parseInt)
+    .action((options) => {
+        summaryOFmonth(options)
+    })
 
 addCommand
     .option('-d, --description <description of the expense>', 'Description of the expense')
