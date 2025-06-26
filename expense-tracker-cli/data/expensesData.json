@@ -1,0 +1,17 @@
+[
+  {
+    "description": "dinner",
+    "amount": 2000,
+    "id": 1
+  },
+  {
+    "description": "lunch",
+    "amount": 4502,
+    "id": 2
+  },
+  {
+    "description": "launched",
+    "amount": 45,
+    "id": 3
+  }
+]

@@ -6,7 +6,7 @@ const MyexpenseData = require('../utils/expenseData.class.utils.js');
 const dirPath = path.join(__dirname, '../data'); // getting the path of the data directory
 
 const listData = (allCommands) => {
-    const filePath = path.join(dirPath, 'expensesData.json');
+    const filePath = path.join(dirPath, 'expensesData.json')
     if(!dirPath){
         return console.log('You did not add any expenses yet');
     }
