@@ -23,7 +23,6 @@ const summaryexpense = () => {
     return console.log(`Total expenses: ${subTotal} INR`);
     
 }
-
 module.exports = {
     summaryexpense
 };
