@@ -4,3 +4,4 @@
 ## [github-activity-cli-project](https://roadmap.sh/projects/github-user-activity)
 ## [personal-blog-web-app-project](https://roadmap.sh/projects/personal-blog)
 ## [weather-api-project](https://roadmap.sh/projects/weather-api-wrapper-service)
+## [expense-traker-cli](https://roadmap.sh/projects/expense-tracker)
