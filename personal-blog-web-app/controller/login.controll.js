@@ -31,6 +31,7 @@ const CurrentDateTime = () => {
 
 const blogSFolder = path.join(__dirname, 'blogs');
 
+// add post 
 const addPost = asyncHandler(async (req, res) => {
     const { userName, role } = req.user;
     const { blogTitle, blogData } = req.body;
@@ -310,7 +311,7 @@ const delPost = asyncHandler(async (req, res) => {
     for (let postMatched of posts) {
 
         if (postMatched.id === Number(id)) {
-            indexOfPost = posts.indexOf(postMatched);
+            const indexOfPost = posts.indexOf(postMatched);
             posts.splice(indexOfPost, 1);
             fs.writeFileSync(filePath, JSON.stringify(posts, null, 2), 'utf-8');
 

@@ -20,20 +20,18 @@ const globalMonths = [
 ]
 
 const summaryexpense = () => {
-    if(!fs.existsSync(dirPath)){
-        return console.log("Nothing added to track your expense!");
-    }
-    if(!fs.existsSync(filePath)){
-        return console.log('Nothing added to track your expense!');
+    if (!fs.existsSync(dirPath) || !fs.existsSync(filePath)) {
+            return console.log('Nothing added to track your expense!');
     }
     const expesedata = JSON.parse(fs.readFileSync(filePath , 'utf-8' , (err) => {
         if(err){
             return console.log(err);
         }
     }))
+    
     let subTotal = 0 ;
     for(let expenseItem of expesedata){
-        subTotal += Number(expenseItem.amount) ;
+        subTotal += expenseItem.amount ;
     }
     return console.log(`Total expenses: ${subTotal} INR`);
     
@@ -42,21 +40,20 @@ const summaryexpense = () => {
 // expense summary according to month
 const summaryOFmonth = (options) => {
     const { month } = options ;
-    if(!fs.existsSync(dirPath)){
-        return console.log("Nothing added to track your expense!");
+    if(month > 12 || month <= 0){
+        return console.log("Please Enter a valid month");        
     }
-    if(!fs.existsSync(filePath)){
+    if (!fs.existsSync(dirPath) || !fs.existsSync(filePath)) {
         return console.log('Nothing added to track your expense!');
     }
     const expenseData = JSON.parse(fs.readFileSync(filePath , 'utf-8' , (err) => {
         console.log(err);
     })) ;
-    
     let subTotal = 0 ;
     for(let expenseItem of expenseData){
         const Date = Number(expenseItem.Date.split('-')[1]); 
         if(Date === month){
-            subTotal += Number(expenseItem.amount) ;
+            subTotal += Number(expenseItem.amount) || 0 ;
         }
     }
     return console.log(`Total expense in ${globalMonths[month - 1]} : ${subTotal} INR`) ;

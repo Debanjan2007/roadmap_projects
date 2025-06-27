@@ -6,10 +6,7 @@ const dirPath = path.join(__dirname, '../data'); // getting the path of the data
 
 function listData() {
     const filePath = path.join(dirPath, 'expensesData.json')
-    if (!fs.existsSync(dirPath)) {
-        return console.log('You did not add any expenses yet');
-    }
-    if (!fs.existsSync(filePath)) {
+    if (!fs.existsSync(dirPath) || !fs.existsSync(filePath)) {
         return console.log('You did not add any expenses yet');
     }
     const expenseFileData = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
