@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- talewind css cdn -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- custom css -->
+    <link rel="stylesheet" href="/shareHtml.css">
+    <!-- font awesome cdn -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+    <div class="flex  justify-center min-h-screen bg-gray-900 p-6">
+        <div class="main flex w-1/2 justify-center flex-col gap-y-6 ">
+            <div
+                class="upload w-full flex items-center font-bold justify-center h-10 outline-2 outline-sky-600 text-blue-600 dark:text-sky-400 rounded">
+                <h3>Upload Markdown file</h3>
+            </div>
+            <div class="grid grid-rows-1 grid-cols-2 gap-3  text-sky-400">
+                <div class="row-span-20 flex-col rounded outline-1 outline-sky-600 hover:bg-sky-950 hover:text-sky-300">
+                    <div class="flex w-full h-8 justify-center items-center gap-1">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        <p>Markdown Input</p>
+                    </div>
+                    <div class="textarea w-full h-8/10 mt-2  flex justify-center items-center">
+                        <textarea name="" class="h-full w-19/20 outline-1 outline-sky-600" id=""></textarea>
+                    </div>
+                </div>
+                <div class="row-span-20 rounded flex-col outline-1 outline-sky-600 hover:bg-sky-950 hover:text-sky-300">
+                    <div class="flex w-full h-8 justify-center items-center gap-1">
+                        <i class="fa-solid fa-check"></i>
+                        <p>Grammar suggestion</p>
+                    </div>
+                    <div class="textarea w-full h-8/10 mt-2  flex justify-center items-center">
+                        <textarea name="" class="h-full w-19/20 outline-1 outline-sky-600" id=""></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="preview w-full outline-1 outline-sky-600  bg-teal-50 rounded" style="padding: 1rem; overflow-y: auto;">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae, tenetur. Quo eaque ipsum illum, nostrum
+                cupiditate error voluptatem harum ullam laboriosam nemo deserunt vel, numquam, commodi labore magnam
+                sint autem. Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae, laudantium quam. Id
+                asperiores nemo expedita esse ipsum, consequatur odio deleniti similique vel suscipit fuga cumque ullam
+                iste quod perspiciatis inventore!
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates eum eius eveniet iste, ut alias
+                officiis repellendus incidunt! Delectus, alias tempore! Explicabo repudiandae architecto omnis
+                reprehenderit impedit nostrum sequi repellat. Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                Molestias nulla debitis autem reiciendis voluptatibus, optio veritatis vitae, sequi facilis eos, dolorum
+                ratione esse impedit harum. Saepe incidunt reiciendis culpa tenetur!
+               
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
