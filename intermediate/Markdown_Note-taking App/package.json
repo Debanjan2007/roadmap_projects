@@ -1,0 +1,22 @@
+{
+  "name": "markdown_note-taking-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "keywords": [],
+  "author": "Debanjan Das",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@dotenvx/dotenvx": "^1.45.1",
+    "dompurify": "^3.2.6",
+    "express": "^5.1.0",
+    "languagetool-api": "^1.1.2",
+    "marked": "^16.0.0",
+    "nodemon": "^3.1.10"
+  }
+}
