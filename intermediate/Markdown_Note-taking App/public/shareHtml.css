@@ -12,3 +12,13 @@
         background-color: #101828;
     }
 }
+
+ #fileInput {
+    display: none; /* Hides the default file input */
+  }
+
+  .custom-file-upload {
+    display: inline-block;
+    cursor: pointer;
+    background-color: transparent; /* Tailwind indigo-600 */  
+}
