@@ -1,8 +1,5 @@
 const fs = require('fs');
 
-
-
-
 // adds a task to the tasks.json file
 const addTask = (task) => {
     if(!task){
@@ -110,7 +107,7 @@ const listTodo = () => {
             }
         });
         if(tasks.length <= 0 ){ return console.log(null);}
-        console.log(JSON.stringify(tasks , null , 2));
+        console.table(JSON.stringify(tasks , null , 2));
     } catch (error) {
         throw new error
     }
@@ -132,7 +129,7 @@ const listDone = () => {
         }
     });
     if(tasks.length <= 0 ){ return console.log(null);}
-    console.log(JSON.stringify(tasks , null , 2));
+    console.table(JSON.stringify(tasks , null , 2));
 }
 // listt all the todos or tasks 
 const listAll = () => {
@@ -145,7 +142,7 @@ const listAll = () => {
         }
     })) ;
 
-    console.log(JSON.stringify(todos , null , 2));
+    console.table(JSON.stringify(todos , null , 2));
 }
 
 // mark done functionality 
