@@ -20,7 +20,6 @@ const CheckForCorrection = (range, answer) => { // function to check te number
                 continue ;
             }
         }
-         
     }
     console.log("😟Oh! you lost the game!");
     console.log(`The number was ${answer}`);

@@ -1,0 +1,7 @@
+services: 
+  blogapp: 
+    build: 
+      context: .
+      dockerfile: dockerfile
+    ports:
+      - "6800:6800"
